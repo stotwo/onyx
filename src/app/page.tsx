@@ -153,7 +153,7 @@ export default function Home() {
       service_name: selectedService?.name,
       service_price: selectedService?.price,
       service_duration: selectedService?.duration,
-      service_duration_min: durationMin,
+      duration_min: durationMin, // Correction: match the SQL schema (duration_min)
       booking_date: formatApiDate(selectedDate),
       booking_time: selectedTime,
       status: 'confirmed'
