@@ -18,5 +18,3 @@ ONYX est conçu pour offrir une expérience utilisateur fluide et immersive, ref
 - **Design Responsive** : Une expérience optimisée pour tous les écrans, du mobile au desktop.
 
 ---
-
-*Développé avec Next.js, TypeScript et Tailwind CSS.*
