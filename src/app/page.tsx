@@ -371,7 +371,7 @@ export default function Home() {
 
                                     <div className="grid grid-cols-7 gap-1">
                                     {calendarDays.map((d: any, i) => {
-                                        if (!d) return <div key={`empty-${i}`} className="aspect-square" />;
+                                        if (!d) return <div key={`empty-${i}`} className="h-7" />;
                                         
                                         const now = new Date();
                                         now.setHours(0,0,0,0);
@@ -389,7 +389,7 @@ export default function Home() {
                                             key={i}
                                             onClick={() => setSelectedDate(d)}
                                             disabled={isDisabled} 
-                                            className={`aspect-square flex items-center justify-center text-sm font-serif transition-all relative group ${
+                                            className={`h-7 flex items-center justify-center text-sm font-serif transition-all relative group ${
                                                 isDisabled 
                                                 ? 'text-neutral-700 cursor-not-allowed' 
                                                 : isToday 
