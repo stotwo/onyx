@@ -2,6 +2,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { supabase } from '@/lib/supabaseClient';
 import { Check, Instagram, ArrowLeft, Mail, ChevronDown, ChevronRight, ChevronLeft } from 'lucide-react';
 
 export default function Home() {
@@ -13,12 +14,40 @@ export default function Home() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [bookedSlots, setBookedSlots] = useState<any[]>([]);
 
-  // Chargement des RDV existants pour masquer les créneaux déjà pris
+  // Chargement des RDV depuis Supabase
   useEffect(() => {
-    const saved = localStorage.getItem('onyx_bookings');
-    if (saved) {
-      setBookedSlots(JSON.parse(saved));
-    }
+    const fetchBookings = async () => {
+      const { data, error } = await supabase
+        .from('bookings')
+        .select('*');
+      
+      if (data) {
+        // Adaptateur pour matcher le format attendu par le front (si besoin)
+        // Le front utilise b.dateStr et b.time, b.durationMin
+        // La DB renvoie b.booking_date, b.booking_time, b.duration_min
+        // On va mapper pour simplifier la vie
+        const formatted = data.map(b => ({
+            ...b,
+            dateStr: b.booking_date,
+            time: b.booking_time,
+            durationMin: b.duration_min || b.service_duration_min,
+            service: b.service_name
+        }));
+        setBookedSlots(formatted);
+      }
+    };
+
+    fetchBookings();
+    
+    // Souscription aux changements temps réel (Optionnel mais cool)
+    const subscription = supabase
+      .channel('public:bookings')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'bookings' }, () => {
+        fetchBookings();
+      })
+      .subscribe();
+
+    return () => { subscription.unsubscribe(); };
   }, []);
 
   const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -105,46 +134,50 @@ export default function Home() {
     return h * 60 + m;
   };
 
-  const handleBookingSubmit = (e: React.FormEvent) => {
+  const handleBookingSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitted(true);
     
     // Simulate server delay + Validation
-    setTimeout(() => {
-      const durationMin = selectedService ? parseDuration(selectedService.duration) : 30;
+    // Actually no need for timeout with async call, but nice for UX feedback
+    
+    const durationMin = selectedService ? parseDuration(selectedService.duration) : 30;
 
-      // Create new booking object
-      const newBooking = {
-        id: Date.now(),
-        clientName: formData.name,
-        clientPhone: formData.phone,
-        clientEmail: formData.email,
-        service: selectedService?.name,
-        price: selectedService?.price,
-        duration: selectedService?.duration,
-        durationMin: durationMin,
-        date: selectedDate, // Stocké complet
-        dateStr: selectedDate ? formatApiDate(selectedDate) : '', // Pour comparaison facile
-        time: selectedTime,
-        status: 'confirmed'
-      };
+    if (!selectedDate || !selectedTime) return;
 
-      // Save to localStorage (Simulation BDD)
-      const existingBookings = JSON.parse(localStorage.getItem('onyx_bookings') || '[]');
-      const updatedBookings = [...existingBookings, newBooking];
-      localStorage.setItem('onyx_bookings', JSON.stringify(updatedBookings));
-      
-      // Update local state to reflect taken slot immediately
-      setBookedSlots(updatedBookings);
+    // Create new booking object for Supabase
+    const newBooking = {
+      client_name: formData.name,
+      client_phone: formData.phone,
+      client_email: formData.email,
+      service_name: selectedService?.name,
+      service_price: selectedService?.price,
+      service_duration: selectedService?.duration,
+      service_duration_min: durationMin,
+      booking_date: formatApiDate(selectedDate),
+      booking_time: selectedTime,
+      status: 'confirmed'
+    };
 
+    const { error } = await supabase
+      .from('bookings')
+      .insert([newBooking]);
+
+    if (error) {
+      alert("Erreur lors de la réservation : " + error.message);
       setIsSubmitted(false);
-      setBookingStep(0);
-      setFormData({ name: '', phone: '', email: '' });
-      setSelectedService(null);
-      setSelectedDate(null);
-      setSelectedTime(null);
-      alert("Réservation confirmée. Votre créneau est sécurisé."); 
-    }, 1500);
+      return;
+    }
+
+    // Le useEffect avec la subscription va mettre à jour le state automatiquement
+    // Mais on peut reset le form tout de suite
+    setIsSubmitted(false);
+    setBookingStep(0);
+    setFormData({ name: '', phone: '', email: '' });
+    setSelectedService(null);
+    setSelectedDate(null);
+    setSelectedTime(null);
+    alert("Réservation confirmée. Votre créneau est sécurisé."); 
   };
 
   // Check availability with OVERLAP logic

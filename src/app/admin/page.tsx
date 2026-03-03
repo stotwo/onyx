@@ -1,20 +1,53 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Calendar, Clock, Trash2, Lock, LogOut, Check } from 'lucide-react';
+import { supabase } from '@/lib/supabaseClient';
+import { Calendar, Trash2, Lock, LogOut } from 'lucide-react';
+
+interface Booking {
+  id: number;
+  clientName: string;
+  clientPhone: string;
+  service: string;
+  price: number;
+  date: string;
+  time: string;
+}
 
 export default function AdminDashboard() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
-  const [bookings, setBookings] = useState<any[]>([]);
+  const [bookings, setBookings] = useState<Booking[]>([]);
 
-  // Chargement des RDV depuis le stockage local (simulation de base de données)
+  const [refreshKey, setRefreshKey] = useState(0);
+
   useEffect(() => {
-    const saved = localStorage.getItem('onyx_bookings');
-    if (saved) {
-      setBookings(JSON.parse(saved).sort((a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime()));
+    if (isAuthenticated) {
+      const loadBookings = async () => {
+        const { data } = await supabase
+          .from('bookings')
+          .select('*')
+          .order('booking_date', { ascending: true })
+          .order('booking_time', { ascending: true });
+
+        if (data) {
+          const formatted = data.map((b) => ({
+            id: b.id,
+            clientName: b.client_name,
+            clientPhone: b.client_phone,
+            service: b.service_name,
+            price: b.service_price,
+            date: b.booking_date,
+            time: b.booking_time
+          }));
+          setBookings(formatted);
+        }
+      };
+      loadBookings();
     }
-  }, []);
+  }, [isAuthenticated, refreshKey]);
+
+
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,11 +59,15 @@ export default function AdminDashboard() {
     }
   };
 
-  const handleDelete = (id: number) => {
+  const handleDelete = async (id: number) => {
     if (confirm('Voulez-vous vraiment annuler ce rendez-vous et libérer le créneau ?')) {
-      const updated = bookings.filter(b => b.id !== id);
-      setBookings(updated);
-      localStorage.setItem('onyx_bookings', JSON.stringify(updated));
+      const { error } = await supabase.from('bookings').delete().eq('id', id);
+      
+      if (!error) {
+         setRefreshKey(prev => prev + 1);
+      } else {
+         alert("Erreur: " + error.message);
+      }
     }
   };
 
@@ -60,8 +97,8 @@ export default function AdminDashboard() {
       <div className="max-w-4xl mx-auto">
         <div className="flex justify-between items-center mb-12 border-b border-white/10 pb-6">
             <div>
-                <h1 className="text-3xl font-serif text-white">Tableau de Bord <span className="text-xs bg-yellow-900/30 text-yellow-500 px-2 py-1 rounded ml-2 border border-yellow-500/20 font-sans tracking-normal">Mode Local</span></h1>
-                <p className="text-neutral-500 text-sm mt-1">Gestion des rendez-vous clients (Visible uniquement sur cet appareil)</p>
+                <h1 className="text-3xl font-serif text-white">Tableau de Bord <span className="text-xs bg-green-900/30 text-green-500 px-2 py-1 rounded ml-2 border border-green-500/20 font-sans tracking-normal">Mode Connecté</span></h1>
+                <p className="text-neutral-500 text-sm mt-1">Gestion des rendez-vous clients (Synchronisé en temps réel)</p>
             </div>
             <button onClick={() => setIsAuthenticated(false)} className="flex items-center gap-2 text-xs uppercase tracking-widest hover:text-white text-neutral-500">
                 <LogOut className="w-4 h-4" /> Quitter
@@ -78,7 +115,7 @@ export default function AdminDashboard() {
                 {bookings.map((booking) => (
                     <div key={booking.id} className="bg-white/5 border border-white/5 p-6 flex flex-col md:flex-row justify-between items-start md:items-center hover:bg-white/10 transition-colors group">
                         <div className="flex gap-6 items-center">
-                            <div className="text-center min-w-[60px]">
+                            <div className="text-center min-w-16">
                                 <span className="block text-2xl font-serif text-white">{new Date(booking.date).getDate()}</span>
                                 <span className="block text-xs uppercase text-neutral-500">{new Date(booking.date).toLocaleDateString('fr-FR', { month: 'short' })}</span>
                             </div>
