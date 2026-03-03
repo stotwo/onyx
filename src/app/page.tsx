@@ -235,7 +235,7 @@ export default function Home() {
       
       {/* HEADER MINIMALISTE */}
       <nav className="fixed w-full z-50 top-0 left-0 px-8 py-6 flex justify-between items-center mix-blend-difference">
-        <div className="text-2xl font-serif tracking-tighter font-bold text-white">ONYX.</div>
+        <a href="#" className="text-2xl font-serif tracking-tighter font-bold text-white cursor-pointer hover:opacity-80 transition-opacity">ONYX.</a>
         <a href="#reservation" className="text-xs uppercase tracking-[0.2em] hover:text-white/70 transition-colors border-b border-transparent hover:border-white/70 pb-1">
           Prendre Rendez-vous
         </a>
