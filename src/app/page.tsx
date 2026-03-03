@@ -298,9 +298,9 @@ export default function Home() {
       </section>
 
       {/* MODULE DE RESERVATION PRO */}
-      <section id="reservation" className="scroll-mt-32 py-32 bg-[#0a0a0a] border-t border-white/5">
+      <section id="reservation" className="scroll-mt-40 py-20 bg-[#0a0a0a] border-t border-white/5">
         <div className="max-w-2xl mx-auto px-6">
-            <div className="text-center mb-16">
+            <div className="text-center mb-12">
                 <span className="text-xs uppercase tracking-[0.2em] text-neutral-500">Rendez-vous</span>
                 <h2 className="text-4xl font-serif text-white mt-4">Votre créneau</h2>
             </div>
