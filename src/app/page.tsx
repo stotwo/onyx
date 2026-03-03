@@ -132,21 +132,21 @@ export default function Home() {
     // 1. Validation Téléphone (au moins 9 chiffres)
     const cleanPhone = formData.phone.replace(/\D/g, '');
     if (cleanPhone.length < 9) {
-        alert("ERROR: INVALID PHONE NUMBER SEQUENCE. PLEASE RETRY.");
+        alert("ERREUR: NUMÉRO DE TÉLÉPHONE INVALIDE. VEUILLEZ RÉESSAYER.");
         return;
     }
 
     // 2. Validation Email (format standard avec @ et point)
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
     if (!emailRegex.test(formData.email)) {
-        alert("ERROR: INVALID EMAIL SYNTAX.");
+        alert("ERREUR: FORMAT EMAIL INVALIDE.");
         return;
     }
     
     // 3. Validation Adresse (si domicile : longueur + présence d'espace)
     if (isHomeVisit) {
         if (formData.address.trim().length < 10 || !formData.address.trim().includes(' ')) {
-            alert("ERROR: INCOMPLETE LOCATION DATA. FULL ADDRESS REQUIRED.");
+            alert("ERREUR: ADRESSE INCOMPLÈTE. ADRESSE COMPLÈTE REQUISE.");
             return;
         }
     }
@@ -206,8 +206,8 @@ export default function Home() {
             </div>
             
             <a href="#reservation" className="group px-6 py-3 border border-cyan-400/30 bg-black/50 backdrop-blur-md text-xs font-bold uppercase tracking-widest hover:bg-cyan-400 hover:text-black transition-all rounded-full">
-                <span className="group-hover:hidden text-cyan-400">Book Session</span>
-                <span className="hidden group-hover:block">Now</span>
+                <span className="group-hover:hidden text-cyan-400">Réserver</span>
+                <span className="hidden group-hover:block">Maintenant</span>
             </a>
         </div>
       </nav>
@@ -239,17 +239,17 @@ export default function Home() {
                 {/* Floating CTA Buttons - Rounded */}
                 <div className="mt-12 flex flex-col md:flex-row gap-4 animate-fade-in-up">
                     <a href="#reservation" className="relative overflow-hidden bg-cyan-500 hover:bg-cyan-400 text-black font-bold uppercase tracking-widest px-8 py-4 transition-all hover:scale-105 shadow-[0_0_20px_rgba(6,182,212,0.3)] rounded-full text-sm">
-                        Start Ritual
+                        Commencer le rituel
                     </a>
                     <a href="#galerie" className="border border-white/20 hover:border-cyan-400 hover:text-cyan-400 text-white font-bold uppercase tracking-widest px-8 py-4 transition-colors backdrop-blur-md rounded-full text-sm">
-                        The Work
+                        Réalisations
                     </a>
                 </div>
         </div>
 
         {/* Desktop Decor - Simplified */}
         <div className="absolute bottom-10 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-2 animate-bounce opacity-50">
-             <span className="text-neutral-500 text-[10px] uppercase tracking-widest">Scroll</span>
+             <span className="text-neutral-500 text-[10px] uppercase tracking-widest">Découvrir</span>
              <ChevronDown className="w-4 h-4 text-neutral-500" />
         </div>
       </section>
@@ -260,11 +260,11 @@ export default function Home() {
         <div className="container mx-auto px-6 relative z-10">
           <div className="flex flex-col md:flex-row justify-between items-end mb-12">
             <div>
-              <h2 className="text-4xl md:text-6xl font-black text-white mb-2 tracking-tighter">THE WORK</h2>
-              <p className="text-cyan-400 font-bold tracking-[0.2em] text-xs uppercase pl-1">Precision & Chaos</p>
+              <h2 className="text-4xl md:text-6xl font-black text-white mb-2 tracking-tighter">RÉALISATIONS</h2>
+              <p className="text-cyan-400 font-bold tracking-[0.2em] text-xs uppercase pl-1">Précision & Chaos</p>
             </div>
             <a href="#" className="text-neutral-500 hover:text-cyan-400 mt-4 md:mt-0 flex items-center gap-2 text-xs uppercase tracking-widest border-b border-transparent hover:border-cyan-400/50 pb-1 transition-all">
-              Full Portfolio <span className="text-lg">→</span>
+              Portfolio Complet <span className="text-lg">→</span>
             </a>
           </div>
           
@@ -315,9 +315,9 @@ export default function Home() {
             {/* Left Column: The Booking Flow */}
             <div className="lg:w-3/5">
                 <div className="mb-8">
-                    <span className="text-cyan-500 font-bold tracking-widest text-xs uppercase mb-2 block rounded-full bg-cyan-900/20 px-3 py-1 w-fit">Booking Process</span>
-                    <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-4 tracking-tight">Secure Your Spot.</h2>
-                    <p className="text-neutral-400 text-lg">Precision grooming for the modern individual.</p>
+                    <span className="text-cyan-500 font-bold tracking-widest text-xs uppercase mb-2 block rounded-full bg-cyan-900/20 px-3 py-1 w-fit">Réservation</span>
+                    <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-4 tracking-tight">Réservez votre créneau.</h2>
+                    <p className="text-neutral-400 text-lg">Coiffure de précision pour l'individu moderne.</p>
                 </div>
 
                 <div className="bg-neutral-900/30 backdrop-blur-xl border border-white/5 rounded-3xl p-6 md:p-8 shadow-2xl relative">
@@ -344,7 +344,7 @@ export default function Home() {
                         {/* STEP 0: CHOIX PRESTATION */}
                         {bookingStep === 0 && (
                             <div className="animate-fade-in flex flex-col gap-4 h-full">
-                                <h3 className="text-xl font-bold text-white mb-4 text-center">Select Service</h3>
+                                <h3 className="text-xl font-bold text-white mb-4 text-center">Choisir la prestation</h3>
                                 <div className="grid grid-cols-1 gap-3 grow">
                                     {services.map((service, idx) => (
                                         <button
@@ -373,7 +373,7 @@ export default function Home() {
                         {/* STEP 1: DATE */}
                         {bookingStep === 1 && (
                             <div className="animate-fade-in h-full flex flex-col">
-                                <h3 className="text-xl font-bold text-white mb-6 text-center">Select Date</h3>
+                                <h3 className="text-xl font-bold text-white mb-6 text-center">Choisir la date</h3>
                                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                                     {availableDays.map((day, idx) => {
                                         const isMonday = day.getDay() === 1; // Lundi
@@ -426,7 +426,7 @@ export default function Home() {
                                                     </span>
                                                 ) : (
                                                     <span className="text-[9px] font-bold mt-2 uppercase tracking-wider text-neutral-600">
-                                                        {isMonday ? 'CLOSED' : 'FULL'}
+                                                        {isMonday ? 'FERMÉ' : 'COMPLET'}
                                                     </span>
                                                 )}
                                             </button>
@@ -439,7 +439,7 @@ export default function Home() {
                         {/* STEP 2: TIME */}
                         {bookingStep === 2 && (
                             <div className="animate-fade-in h-full flex flex-col">
-                                <h3 className="text-xl font-bold text-white mb-2 text-center">Select Time</h3>
+                                <h3 className="text-xl font-bold text-white mb-2 text-center">Choisir l'heure</h3>
                                 <p className="text-center text-cyan-400 text-xs font-bold uppercase mb-8 inline-block mx-auto bg-cyan-900/20 px-3 py-1 rounded-full">{selectedDate && formatDate(selectedDate)}</p>
                                 
                                 <div className="grid grid-cols-3 gap-3">
@@ -484,7 +484,7 @@ export default function Home() {
                          {bookingStep === 3 && (
                             <form onSubmit={handleBookingSubmit} className="animate-fade-in flex flex-col h-full justify-between">
                                 <div className="space-y-6">
-                                    <h3 className="text-xl font-bold text-white mb-6 text-center">Identity</h3>
+                                    <h3 className="text-xl font-bold text-white mb-6 text-center">Vos coordonnées</h3>
                                     
                                     {/* Recap Card */}
                                     <div className="bg-neutral-900/50 border border-neutral-800 rounded-2xl p-5 mb-4 backdrop-blur-sm">
@@ -513,7 +513,7 @@ export default function Home() {
                                         })()}
 
                                         <div className="flex justify-between items-center pt-2">
-                                             <span className="text-white text-sm font-bold uppercase tracking-wider">Total Estimated</span>
+                                             <span className="text-white text-sm font-bold uppercase tracking-wider">Total Estimé</span>
                                              <span className="font-black text-white text-2xl">{getPriceDetails()?.total}€</span>
                                         </div>
                                     </div>
@@ -529,8 +529,8 @@ export default function Home() {
                                         }`}
                                     >
                                         <div className="text-left">
-                                            <span className={`block font-bold transition-colors ${isHomeVisit ? 'text-white' : 'text-neutral-300'}`}>Home Visit</span>
-                                            <span className="text-xs text-neutral-500 uppercase tracking-widest">Travel Fee Applied</span>
+                                            <span className={`block font-bold transition-colors ${isHomeVisit ? 'text-white' : 'text-neutral-300'}`}>À Domicile</span>
+                                            <span className="text-xs text-neutral-500 uppercase tracking-widest">Frais de déplacement</span>
                                         </div>
                                         <div className="flex items-center gap-3">
                                             <span className={`font-bold font-mono transition-colors ${isHomeVisit ? 'text-cyan-400' : 'text-neutral-500'}`}>+100€</span>
@@ -550,7 +550,7 @@ export default function Home() {
                                                     required
                                                     minLength={10}
                                                     className="w-full bg-neutral-900/50 border border-neutral-800 rounded-2xl py-3 pl-12 pr-4 text-white focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500/50 transition-all placeholder:text-neutral-700"
-                                                    placeholder="Full Address"
+                                                    placeholder="Adresse complète"
                                                     value={formData.address || ''}
                                                     onChange={e => setFormData({...formData, address: e.target.value})}
                                                 />
@@ -561,7 +561,7 @@ export default function Home() {
                                             <input 
                                                 required
                                                 className="w-full bg-neutral-900/50 border border-neutral-800 rounded-2xl py-3 pl-12 pr-4 text-white focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500/50 transition-all placeholder:text-neutral-700"
-                                                placeholder="Name"
+                                                placeholder="Nom"
                                                 value={formData.name}
                                                 onChange={e => setFormData({...formData, name: e.target.value})}
                                             />
@@ -642,7 +642,7 @@ export default function Home() {
                                         : 'bg-cyan-500 text-black hover:bg-cyan-400 hover:scale-[1.01] hover:shadow-cyan-500/20'
                                     }`}
                                 >
-                                    {isSubmitted ? <Check className="w-5 h-5" /> : "CONFIRM BOOKING"}
+                                    {isSubmitted ? <Check className="w-5 h-5" /> : "CONFIRMER LA RÉSERVATION"}
                                 </button>
                             </form>
                         )}
@@ -657,12 +657,12 @@ export default function Home() {
                     <div className="w-12 h-12 rounded-2xl bg-neutral-900 flex items-center justify-center mb-6">
                         <MapPin className="w-5 h-5 text-white" />
                     </div>
-                    <h3 className="text-2xl font-bold text-white mb-2 tracking-tight">THE LAB</h3>
-                    <p className="text-neutral-500 leading-relaxed mb-6 text-sm">Where the magic happens. Designed for compression and decompression.</p>
+                    <h3 className="text-2xl font-bold text-white mb-2 tracking-tight">LE LAB</h3>
+                    <p className="text-neutral-500 leading-relaxed mb-6 text-sm">Là où la magie opère. Conçu pour la compression et la décompression.</p>
                     <div className="space-y-4 border-t border-neutral-800 pt-6">
                         <div className="flex items-start gap-3 text-sm font-medium text-neutral-300">
                              <MapPin className="w-4 h-4 text-cyan-500 mt-1" />
-                             <span className="block font-mono">ONYX HQ<br/>Somewhere in the City</span>
+                             <span className="block font-mono">QG ONYX<br/>Quelque part en ville</span>
                         </div>
                         <div className="flex items-center gap-3 text-sm font-medium text-neutral-300">
                              <Mail className="w-4 h-4 text-cyan-500" />
@@ -676,15 +676,15 @@ export default function Home() {
                      <div className="w-12 h-12 rounded-2xl bg-neutral-900 flex items-center justify-center mb-6">
                         <Clock className="w-5 h-5 text-white" />
                     </div>
-                    <h3 className="text-2xl font-bold text-white mb-6 tracking-tight">TIMING</h3>
+                    <h3 className="text-2xl font-bold text-white mb-6 tracking-tight">HORAIRES</h3>
                     
                     <div className="space-y-4">
                         <div className="flex justify-between items-center pb-4 border-b border-neutral-800/50">
-                            <span className="text-neutral-500 text-sm uppercase font-bold tracking-widest">Mon</span>
-                            <span className="text-[10px] font-bold bg-neutral-800 px-3 py-1 rounded-full text-neutral-400 border border-neutral-700">CLOSED</span>
+                            <span className="text-neutral-500 text-sm uppercase font-bold tracking-widest">Lun</span>
+                            <span className="text-[10px] font-bold bg-neutral-800 px-3 py-1 rounded-full text-neutral-400 border border-neutral-700">FERMÉ</span>
                         </div>
                         <div className="flex justify-between items-center">
-                            <span className="text-white font-bold text-sm uppercase tracking-widest">Tue — Sun</span>
+                            <span className="text-white font-bold text-sm uppercase tracking-widest">Mar — Dim</span>
                             <span className="text-cyan-500 font-bold">12:00 - 18:00</span>
                         </div>
                     </div>
@@ -718,10 +718,10 @@ export default function Home() {
           
           <div className="text-center space-y-4">
               <p className="text-neutral-500 text-sm uppercase tracking-widest font-bold">
-                Designed for the Elite
+                Conçu pour l'Élite
               </p>
               <p className="text-neutral-700 text-xs">
-                &copy; {new Date().getFullYear()} ONYX STUDIO. All Rights Reserved.
+                &copy; {new Date().getFullYear()} ONYX STUDIO. Tous droits réservés.
               </p>
           </div>
         </div>
