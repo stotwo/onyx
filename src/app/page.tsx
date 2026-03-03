@@ -300,21 +300,21 @@ export default function Home() {
       {/* MODULE DE RESERVATION PRO */}
       <section id="reservation" className="scroll-mt-24 pt-4 pb-12 bg-[#0a0a0a] border-t border-white/5">
         <div className="max-w-2xl mx-auto px-6">
-            <div className="text-center mb-8">
-                <span className="text-xs uppercase tracking-[0.2em] text-neutral-500">Rendez-vous</span>
-                <h2 className="text-4xl font-serif text-white mt-4">Votre créneau</h2>
+            <div className="text-center mb-6">
+                <span className="text-[10px] uppercase tracking-[0.2em] text-neutral-500">Rendez-vous</span>
+                <h2 className="text-3xl font-serif text-white mt-1">Votre créneau</h2>
             </div>
 
-            <div className="bg-[#050505] border border-white/10 p-8 md:p-10 shadow-2xl">
+            <div className="bg-[#050505] border border-white/10 p-6 shadow-2xl">
                 {/* STEP INDICATOR */}
-                <div className="flex items-center justify-between md:justify-start md:gap-8 mb-10 text-[10px] uppercase tracking-widest text-neutral-500 border-b border-white/5 pb-6">
+                <div className="flex items-center justify-between md:justify-start md:gap-8 mb-6 text-[10px] uppercase tracking-widest text-neutral-500 border-b border-white/5 pb-4">
                     <span className={bookingStep >= 0 ? "text-white" : ""}>01. Service</span>
                     <span className={bookingStep >= 1 ? "text-white" : ""}>02. Date</span>
                     <span className={bookingStep >= 2 ? "text-white" : ""}>03. Info</span>
                 </div>
 
                 {/* CONTENT */}
-                <div className="min-h-75">
+                <div className="min-h-[250px]">
                     {bookingStep === 0 && (
                         <div className="space-y-4 animate-fade-in">
                             {services.map((s, i) => (
