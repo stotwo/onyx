@@ -1,6 +1,4 @@
 ## Fonctionnalités
-
-- **Design Moderne & Sombre** : Respect de la DA Instagram (couleurs sombres, typographie élégante).
 - **Galerie** : Mise en avant des coupes et réalisations.
 - **Réservation en ligne** : Formulaire pour que les clients choisissent leur créneau.
 - **Ajout Agenda** : Simulation d'envoi de notification (pour l'instant frontend-only).
