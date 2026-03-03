@@ -298,7 +298,10 @@ export default function Home() {
       </section>
 
       {/* MODULE DE RESERVATION PRO */}
-      <section id="reservation" className="scroll-mt-32 pt-32 pb-12 bg-[#0a0a0a] border-t border-white/5">
+      <section className="relative py-12 bg-[#0a0a0a] border-t border-white/5">
+        {/* Ancre de défilement invisible positionnée plus haut pour compenser le header fixe */}
+        <div id="reservation" className="absolute -top-32 md:-top-40 left-0 w-full h-1 invisible"></div>
+        
         <div className="max-w-2xl mx-auto px-6">
             <div className="text-center mb-8">
                 <span className="text-xs uppercase tracking-[0.2em] text-neutral-500">Rendez-vous</span>
