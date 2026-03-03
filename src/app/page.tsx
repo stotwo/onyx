@@ -2,7 +2,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Check, Instagram, ArrowLeft, Mail, ChevronDown } from 'lucide-react';
+import { Check, Instagram, ArrowLeft, Mail, ChevronDown, ChevronRight, ChevronLeft } from 'lucide-react';
 
 export default function Home() {
   const [bookingStep, setBookingStep] = useState(0); 
@@ -21,6 +21,8 @@ export default function Home() {
     }
   }, []);
 
+  const [currentMonth, setCurrentMonth] = useState(new Date());
+
   // Services - Simple & Pro
   const services = [
     { name: "La Coupe Signature", price: 35, duration: "45 min", desc: "Consultation, shampoing, coupe structurée, coiffage." },
@@ -29,17 +31,41 @@ export default function Home() {
   ];
 
   // Dates handling
-  const getNextDays = () => {
+  const getDaysInMonth = (date: Date) => {
+    const year = date.getFullYear();
+    const month = date.getMonth();
     const days = [];
-    const today = new Date();
-    for (let i = 0; i < 14; i++) {
-        const date = new Date(today);
-        date.setDate(today.getDate() + i);
-        days.push(date);
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    
+    // Add empty slots for days before the first of the month
+    // Sunday is 0, Monday is 1... adjusting so Monday is first
+    let startDay = firstDay.getDay(); 
+    if (startDay === 0) startDay = 7; // Sunday becomes 7
+    
+    for (let i = 1; i < startDay; i++) {
+        days.push(null);
+    }
+    
+    for (let i = 1; i <= lastDay.getDate(); i++) {
+        days.push(new Date(year, month, i));
     }
     return days;
   };
-  const availableDays = getNextDays();
+
+  const calendarDays = getDaysInMonth(currentMonth);
+
+  const nextMonth = () => {
+    const next = new Date(currentMonth);
+    next.setMonth(currentMonth.getMonth() + 1);
+    setCurrentMonth(next);
+  };
+
+  const prevMonth = () => {
+    const prev = new Date(currentMonth);
+    prev.setMonth(currentMonth.getMonth() - 1);
+    setCurrentMonth(prev);
+  };
 
   // Simple formatting
   const formatDate = (date: Date) => {
@@ -239,7 +265,7 @@ export default function Home() {
       </section>
 
       {/* MODULE DE RESERVATION PRO */}
-      <section id="reservation" className="py-32 bg-[#0a0a0a] border-t border-white/5">
+      <section id="reservation" className="scroll-mt-32 py-32 bg-[#0a0a0a] border-t border-white/5">
         <div className="max-w-2xl mx-auto px-6">
             <div className="text-center mb-16">
                 <span className="text-xs uppercase tracking-[0.2em] text-neutral-500">Rendez-vous</span>
@@ -284,32 +310,69 @@ export default function Home() {
                             </button>
                             
                             {!selectedDate ? (
-                                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                                    {availableDays.map((d, i) => {
-                                        const isFull = isDayFull(d);
+                                <div className="max-w-md mx-auto">
+                                    <div className="flex justify-between items-center mb-6 px-2">
+                                        <button 
+                                            onClick={prevMonth} 
+                                            disabled={currentMonth.getMonth() === new Date().getMonth() && currentMonth.getFullYear() === new Date().getFullYear()}
+                                            className="p-2 hover:bg-white/10 rounded-full transition-colors disabled:opacity-20 disabled:hover:bg-transparent"
+                                        >
+                                            <ChevronLeft className="w-5 h-5 text-white" />
+                                        </button>
+                                        <h3 className="text-white font-serif uppercase tracking-widest">
+                                            {currentMonth.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })}
+                                        </h3>
+                                        <button 
+                                            onClick={nextMonth}
+                                            className="p-2 hover:bg-white/10 rounded-full transition-colors"
+                                        >
+                                            <ChevronRight className="w-5 h-5 text-white" />
+                                        </button>
+                                    </div>
+
+                                    <div className="grid grid-cols-7 gap-1 mb-2 text-center">
+                                        {['Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa', 'Di'].map(d => (
+                                            <span key={d} className="text-[10px] text-neutral-600 uppercase font-medium">{d}</span>
+                                        ))}
+                                    </div>
+
+                                    <div className="grid grid-cols-7 gap-1">
+                                    {calendarDays.map((d: any, i) => {
+                                        if (!d) return <div key={`empty-${i}`} className="aspect-square" />;
+                                        
+                                        const now = new Date();
+                                        now.setHours(0,0,0,0);
+                                        const isPast = d < now;
                                         const isSunday = d.getDay() === 0;
-                                        const isDisabled = isSunday || isFull;
+                                        
+                                        // For full check, we need to respect the day
+                                        const isFull = !isPast && !isSunday && isDayFull(d);
+                                        const isDisabled = isPast || isSunday || isFull;
+
+                                        const isToday = d.toDateString() === new Date().toDateString();
 
                                         return (
                                         <button 
                                             key={i}
                                             onClick={() => setSelectedDate(d)}
                                             disabled={isDisabled} 
-                                            className={`p-4 border text-center transition-all aspect-square flex flex-col items-center justify-center relative overflow-hidden ${
+                                            className={`aspect-square flex items-center justify-center text-sm font-serif transition-all relative group ${
                                                 isDisabled 
-                                                ? 'border-white/5 opacity-20 cursor-not-allowed bg-red-900/10' 
-                                                : 'border-white/5 hover:border-white hover:bg-white/5 cursor-pointer'
+                                                ? 'text-neutral-700 cursor-not-allowed' 
+                                                : isToday 
+                                                    ? 'bg-white text-black font-bold' 
+                                                    : 'text-white hover:bg-white/10'
                                             }`}
                                         >
-                                            {isFull && !isSunday && (
-                                                <div className="absolute inset-0 flex items-center justify-center opacity-30">
-                                                    <div className="w-[120%] h-[1px] bg-white transform -rotate-45"></div>
+                                            {isFull && !isSunday && !isPast && (
+                                                <div className="absolute inset-0 flex items-center justify-center">
+                                                    <div className="w-[80%] h-[1px] bg-red-500/50 transform -rotate-45"></div>
                                                 </div>
                                             )}
-                                            <span className="block text-[10px] text-neutral-500 uppercase tracking-wider">{formatDate(d).split(' ')[0].substring(0, 3)}</span>
-                                            <span className="block text-2xl font-serif text-white my-1">{d.getDate()}</span>
+                                            {d.getDate()}
                                         </button>
                                     )})}
+                                    </div>
                                 </div>
                             ) : (
                                 <div>

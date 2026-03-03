@@ -60,8 +60,8 @@ export default function AdminDashboard() {
       <div className="max-w-4xl mx-auto">
         <div className="flex justify-between items-center mb-12 border-b border-white/10 pb-6">
             <div>
-                <h1 className="text-3xl font-serif text-white">Tableau de Bord</h1>
-                <p className="text-neutral-500 text-sm mt-1">Gestion des rendez-vous clients</p>
+                <h1 className="text-3xl font-serif text-white">Tableau de Bord <span className="text-xs bg-yellow-900/30 text-yellow-500 px-2 py-1 rounded ml-2 border border-yellow-500/20 font-sans tracking-normal">Mode Local</span></h1>
+                <p className="text-neutral-500 text-sm mt-1">Gestion des rendez-vous clients (Visible uniquement sur cet appareil)</p>
             </div>
             <button onClick={() => setIsAuthenticated(false)} className="flex items-center gap-2 text-xs uppercase tracking-widest hover:text-white text-neutral-500">
                 <LogOut className="w-4 h-4" /> Quitter
