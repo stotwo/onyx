@@ -363,27 +363,23 @@ export default function Home() {
                                         </button>
                                     </div>
 
-                                    <div className="grid grid-cols-7 gap-1 mb-2 text-center">
-                                        {['Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa', 'Di'].map(d => (
+                                    <div className="grid grid-cols-6 gap-1 mb-2 text-center">
+                                        {['Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa'].map(d => (
                                             <span key={d} className="text-[10px] text-neutral-600 uppercase font-medium">{d}</span>
                                         ))}
                                     </div>
 
-                                    <div className="grid grid-cols-7 gap-1">
+                                    <div className="grid grid-cols-6 gap-1">
                                     {calendarDays.map((d: any, i) => {
+                                        if (d && d.getDay() === 0) return null;
                                         if (!d) return <div key={`empty-${i}`} className="h-7" />;
-                                        
                                         const now = new Date();
                                         now.setHours(0,0,0,0);
                                         const isPast = d < now;
                                         const isSunday = d.getDay() === 0;
-                                        
-                                        // For full check, we need to respect the day
                                         const isFull = !isPast && !isSunday && isDayFull(d);
                                         const isDisabled = isPast || isSunday || isFull;
-
                                         const isToday = d.toDateString() === new Date().toDateString();
-
                                         return (
                                         <button 
                                             key={i}
